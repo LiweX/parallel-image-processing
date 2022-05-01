@@ -17,9 +17,14 @@ int main(){
     //print_matrix(template,dims[2],dims[3]);
     int**dist = alloc_matrix(dims[0]-dims[2],dims[1]-dims[3]);
     compute(dist,imagen,template,dims);
-    print_matrix(dist,dims[0]-dims[2],dims[1]-dims[3]);
-
-
+    //print_matrix(dist,dims[0]-dims[2],dims[1]-dims[3]);
+    int coordenadas[2];
+    //printf("%d %d",coordenadas[1],coordenadas[0]);
+    get_minor(coordenadas,dist,dims);
+    //printf("%d %d",coordenadas[1],coordenadas[0]);
+    FILE * output = fopen("output.txt","w");
+    fprintf(output,"%d\n%d\n%d\n%d\n",coordenadas[0],coordenadas[1],dims[2],dims[3]);
+    fclose(output);
     return 1;
 
 }

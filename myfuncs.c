@@ -51,10 +51,22 @@ void print_matrix(int**matrix,int XDIM,int YDIM){
     }
 }
 
-void compute(int**dist,int**img,int**template,int*dims){
+void compute(int**dist,int**img,int**template,int*dims){ 
     for(int i=0;i<(dims[1]-dims[3]);i++)
         for(int j=0;j<(dims[0]-dims[2]);j++)
             for(int y=0;y<dims[3];y++)
                 for(int x=0;x<dims[2];x++)
                     dist[i][j]+=(template[y][x] - img[i+y][j+x])*(template[y][x] - img[i+y][j+x]);
+}
+
+void get_minor(int*coords,int**dist,int*dims){
+    int temp = dist[0][0];
+    for(int i=0;i<(dims[1]-dims[3]);i++)
+        for(int j=0;j<(dims[0]-dims[2]);j++){
+            if(dist[i][j] < temp){
+                temp=dist[i][j];
+                coords[0]=j;
+                coords[1]=i;
+            }  
+        }              
 }
