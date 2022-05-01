@@ -1,3 +1,5 @@
+from encodings import utf_8
+from tarfile import ENCODING
 from PIL import Image
 import cv2
 import numpy as np
@@ -12,8 +14,11 @@ with open('dimensiones.txt', 'w') as fp:
 
 img_path = 'imagen.png'
 img_array = cv2.imread(img_path, 0)
-img_array.astype('int16').tofile('imgMatrix')
-
+a_file = open("imagen.txt", "w")
+np.savetxt('imagen.txt',img_array,fmt='%d')
 img_path = 'template.png'
 img_array = cv2.imread(img_path, 0)
-img_array.astype('int16').tofile('templateMatrix')
+a_file = open("template.txt", "w")
+np.savetxt('template.txt',img_array,fmt='%d')
+
+a_file.close()
