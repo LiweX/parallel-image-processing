@@ -4,10 +4,11 @@
 #include <unistd.h>
 #include "myfuncs.h"
 
-int main(){
-
+int main(int argc, char *argv[]){
+    if(argc!=2) exit(EXIT_FAILURE);
     int dims[4];
     get_dimensions(dims);
+    int threads = atoi(argv[1]);
     //for(int i=0;i<4;i++) printf("%d ",dims[i]);
     int ** imagen = alloc_matrix(dims[0],dims[1]);
     int ** template = alloc_matrix(dims[2],dims[3]);
@@ -16,7 +17,7 @@ int main(){
     //print_matrix(imagen,dims[0],dims[1]);
     //print_matrix(template,dims[2],dims[3]);
     int**dist = alloc_matrix(dims[0]-dims[2],dims[1]-dims[3]);
-    compute(dist,imagen,template,dims);
+    compute(dist,imagen,template,dims,threads);
     //print_matrix(dist,dims[0]-dims[2],dims[1]-dims[3]);
     int coordenadas[2];
     //printf("%d %d",coordenadas[1],coordenadas[0]);
