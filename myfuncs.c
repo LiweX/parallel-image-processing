@@ -54,11 +54,11 @@ void print_matrix(int**matrix,int XDIM,int YDIM){
 
 void compute(int**dist,int**img,int**template,int*dims,int threads){
     omp_set_dynamic(0);
-    omp_set_num_threads(threads);
+    char aux[100];
     double n_comparaciones=0;
     double comparaciones_totales=(dims[1]-dims[3])*(dims[0]-dims[2]);
     int i,j,y,x;
-    #pragma omp parallel for private(i,j,y,x)
+    #pragma omp parallel for private(i,j,y,x) num_threads(threads)
     for(i=0;i<(dims[1]-dims[3]);i++){
         for(j=0;j<(dims[0]-dims[2]);j++){
             for(y=0;y<dims[3];y++)
@@ -69,7 +69,8 @@ void compute(int**dist,int**img,int**template,int*dims,int threads){
         }
         n_comparaciones+=(dims[0]-dims[2]);
         double porcentaje = (n_comparaciones/comparaciones_totales)*100;
-        printf("%.2f%% Complete\r",porcentaje);    
+        sprintf(aux,"%.2f%% Complete\r",porcentaje);
+        write(1,aux,strlen(aux));   
     }
 }
 
