@@ -3,6 +3,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <math.h>
+#include <omp.h>
 
 int **alloc_matrix(int XDIM, int YDIM)
 {
@@ -16,7 +17,7 @@ int **alloc_matrix(int XDIM, int YDIM)
 void get_dimensions(int*dims){
     FILE * file = fopen("dimensiones.txt","r");
     char buffer[100];
-    fgets(buffer,100,file);
+    if(fgets(buffer,100,file) == NULL) exit(EXIT_FAILURE);
     char* token = strtok(buffer," ");
     int i = 0;
     while(token!=NULL){
@@ -33,7 +34,7 @@ void fill_matrix(int**matrix, int XDIM, int YDIM,char* file){
     size_t len = 0;
     
     for(int i=0;i<YDIM;i++){
-        getline(&line, &len, img);
+        if(getline(&line, &len, img) == -1) exit(EXIT_FAILURE);
         char* token = strtok(line," ");
         for(int j=0;j<XDIM;j++){
             matrix[i][j] = atoi(token);
@@ -51,12 +52,23 @@ void print_matrix(int**matrix,int XDIM,int YDIM){
     }
 }
 
-void compute(int**dist,int**img,int**template,int*dims){ 
-    for(int i=0;i<(dims[1]-dims[3]);i++)
-        for(int j=0;j<(dims[0]-dims[2]);j++)
+void compute(int**dist,int**img,int**template,int*dims){
+    double n_comparaciones=0;
+    double comparaciones_totales=(dims[1]-dims[3])*(dims[0]-dims[2]);
+    for(int i=0;i<(dims[1]-dims[3]);i++){
+        for(int j=0;j<(dims[0]-dims[2]);j++){
             for(int y=0;y<dims[3];y++)
-                for(int x=0;x<dims[2];x++)
-                    dist[i][j]+=(template[y][x] - img[i+y][j+x])*(template[y][x] - img[i+y][j+x]);
+                for(int x=0;x<dims[2];x++){
+                    int tmp=(template[y][x] - img[i+y][j+x]);
+                    dist[i][j]+=tmp*tmp;
+                }
+                    
+        }
+        n_comparaciones+=(dims[0]-dims[2]);
+        double porcentaje = (n_comparaciones/comparaciones_totales)*100;
+        printf("%.2f%% Complete\r",porcentaje);    
+    }
+         
 }
 
 void get_minor(int*coords,int**dist,int*dims){
