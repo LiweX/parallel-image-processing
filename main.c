@@ -26,6 +26,6 @@ int main(int argc, char *argv[]){
     FILE * output = fopen("output.txt","w");
     fprintf(output,"%d\n%d\n%d\n%d\n",coordenadas[0],coordenadas[1],dims[2],dims[3]);
     fclose(output);
-    return 1;
+    return 0;
 
 }
